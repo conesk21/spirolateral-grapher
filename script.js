@@ -1,4 +1,4 @@
-const valArray = [1,2,4,3]
+
 //directional array is right, up, down, even idexes affect x (the 0th element of the coordinate), odd affect y (the 1st element of the coordinate)
 const directArray = [[0,1], [1,1], [0,-1], [1,-1]]
 const nextArray = [1,2,3,0]
@@ -13,6 +13,13 @@ function getNumberofIterations(number){
     } else {
         return 4 
     }
+}
+
+function getValArray(string){
+    cleanString = string.replace("/\s/g", '')
+    valueArray = cleanString.split(',')
+    valueArray = valueArray.map((x)=> parseInt(x))
+    return valueArray
 }
 
 function drawGraph(array){
@@ -32,4 +39,10 @@ function drawGraph(array){
 
 }
 
-drawGraph(valArray)
+function handleGraph(){
+    let valString = document.getElementById("value-string").value;
+    valArray = getValArray(valString)
+    drawGraph(valArray)
+}
+
+
