@@ -1,4 +1,16 @@
-canvas{
+
+.canvas-holder {
+    position: relative;
+    height: 769px;
+    width: 769px;
+    padding: 7px;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
     padding:4px;
     border: solid black 4px;
 }
+
