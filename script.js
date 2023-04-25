@@ -1,20 +1,19 @@
 
 
-//directional array is right, up, down, even idexes affect x (the 0th element of the coordinate), odd affect y (the 1st element of the coordinate)
+/*the directional array is right, up, left, down
+even idexes affect x (the 0th element of the coordinate),
+odd affect y (the 1st element of the coordinate)*/
 const directArray = [[0,1], [1,1], [0,-1], [1,-1]]
+/* because the canvas coordinates are not the same as cartesian, 
+the directions have to be altered to appear on the canvas correctly*/
 const canDirectArray = [[0,1], [1,-1], [0,-1], [1,1]]
-const center = [380,380]
 const canvas = document.querySelector("#upperCanvas");
 const grid = document.querySelector("#lowerCanvas")
+const center = [canvas.width/2,canvas.height/2]
+// the percentage of canvas space that each graph takes up
+const visualSize = .7
 
-function getIterationEnd(array){
-    currentPos = [0,0]
-    for(let i=0; i<array.length;i++){
-        let index = i % 4
-        currentPos[directArray[index][0]] += directArray[index][1]*array[i]
-    }
-    return currentPos
-}
+
 
 function getCenterPoint(array){
     let x = 0 
@@ -59,6 +58,10 @@ function getBoundingBoxSize(extremes){
     return Math.max(width,height)
 }
 
+function getScaleFactor(array){
+    return (Math.min(canvas.height,canvas.width)*visualSize)/getBoundingBoxSize(getCorners(array,4))
+}
+
 function getNumberofIterations(number){
     if (number%4===2){
         return 2
@@ -96,7 +99,8 @@ function drawGraph(array,scaleFactor){
 function handleGraph(){
     let valString = document.getElementById("value-string").value;
     valArray = getValArray(valString)
-    drawGraph(valArray)
+    let scaleFactor = getScaleFactor(valArray)
+    drawGraph(valArray,scaleFactor)
 }
 
 
@@ -107,5 +111,8 @@ test.moveTo(380,0)
 test.lineTo(380,760)
 test.stroke()
 
-drawGraph([1,3,2,4,5],40)
+
+
+drawGraph([1,2,3,10,4],getScaleFactor([1,2,3,10,4]))
+
 
