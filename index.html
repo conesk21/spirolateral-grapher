@@ -24,12 +24,9 @@
          <!-- container for input/buttons-->
         <div class="mutables">
             <div class="input-holder">
-                <form action="#" onsubmit="return handleGraph()">
                     <label for="value-string">Input 1 or more comma separated integers: </label>
                     <input name="valueString" id="value-string" type="text" pattern="^[0-9]+(,[0-9]+)*$" placeholder="1,2,3" >
-                    <button type="submit">Spirolateralize!</button>
-                </form>
-
+                    <button type="submit" id="init">Spirolateralize!</button>
             </div>
             <div class="button-holder">
 

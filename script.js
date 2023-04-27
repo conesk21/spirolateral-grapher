@@ -8,10 +8,13 @@ const directArray = [[0,1], [1,1], [0,-1], [1,-1]]
 the directions have to be altered to appear on the canvas correctly*/
 const canDirectArray = [[0,1], [1,-1], [0,-1], [1,1]]
 const canvas = document.querySelector("#upperCanvas");
+const drawer = canvas.getContext("2d")
 const grid = document.querySelector("#lowerCanvas")
 const center = [canvas.width/2,canvas.height/2]
 // the percentage of canvas space that each graph takes up
 const visualSize = .7
+var valArray = [1,2,3]
+var scalar = getScaleFactor(valArray)
 
 
 
@@ -78,12 +81,13 @@ function getValArray(string){
 }
 
 function drawGraph(array,scaleFactor){
-    var drawer = canvas.getContext("2d")
+   
     drawer.lineCap = "square"
     drawer.translate(center[0],center[1])
     let graphCenter = getCenterPoint(array)
     let currentPos = [-(graphCenter[0]*scaleFactor), (graphCenter[1]*scaleFactor)]
-    drawer.moveTo(currentPos[0],currentPos[1])
+     drawer.beginPath()
+     drawer.moveTo(currentPos[0],currentPos[1])
     for (let j=0; j<getNumberofIterations(array.length);j++){
         for(let i=0; i<array.length;i++){
             let index = (i + j*array.length) % 4
@@ -97,10 +101,12 @@ function drawGraph(array,scaleFactor){
 }
 
 function handleGraph(){
+    drawer.setTransform(1, 0, 0, 1, 0, 0);
+    drawer.clearRect(0, 0, canvas.width, canvas.height);
     let valString = document.getElementById("value-string").value;
     valArray = getValArray(valString)
-    let scaleFactor = getScaleFactor(valArray)
-    drawGraph(valArray,scaleFactor)
+    scalar = getScaleFactor(valArray)
+    drawGraph(valArray,scalar)
 }
 
 
@@ -111,8 +117,8 @@ test.moveTo(380,0)
 test.lineTo(380,760)
 test.stroke()
 
+const intitButton = document.querySelector("#init")
+intitButton.addEventListener('click', handleGraph)
 
-
-drawGraph([1,2,3,10,4],getScaleFactor([1,2,3,10,4]))
 
 
