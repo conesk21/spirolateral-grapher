@@ -111,14 +111,28 @@ function handleGraph(){
 
 
 let test = grid.getContext("2d")
-test.moveTo(0,380)
-test.lineTo(760,380)
-test.moveTo(380,0)
-test.lineTo(380,760)
+test.moveTo(0,canvas.width/2)
+test.lineTo(canvas.height,canvas.width/2)
+test.moveTo(canvas.height/2,0)
+test.lineTo(canvas.height/2,canvas.width)
 test.stroke()
 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleGraph)
 
+var collapsableButtons = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < collapsableButtons.length; i++) {
+  collapsableButtons[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
 
 

@@ -1,16 +1,127 @@
+*{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+ 
+/*css for toolset*/
+  .drawer{
+    margin: auto;
+    padding: 10px 50px;
+    display: flex;
+    align-items: flex-start;
+    justify-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
 
+  .elements,.settings {
+     flex: 1; 
+     background-color: #f1f1f1;
+   
+  }
+  .elements{
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+/*css for canvases*/
 .canvas-holder {
     position: relative;
     height: 769px;
     width: 769px;
     padding: 7px;
+    text-align: center;
+   
 }
 
 canvas {
     position: absolute;
-    top: 0;
+    position: absolute;
+    top:0;
+    bottom: 0;
     left: 0;
-    padding:4px;
-    border: solid black 4px;
+    right: 0;
+    margin:auto; 
 }
 
+/*css for input area*/
+.input-label{
+    font-size: 1rem;
+    color: #444;
+}
+.input-holder{
+    font-size: 1.3rem;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+.input-label,.input-holder{
+    margin: 20px;
+
+}
+#value-string{
+    flex: 2;
+    width: 100%;
+    padding: 8px 28px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    border: none;
+    font-size: 1rem;
+    outline: none;
+}
+#value-string:focus{
+    background-color: #247BA0;
+    color:  #E5E5E5;
+    font-size: 1rem;
+    border:none;
+}
+#value-string:focus::placeholder{
+    color:#f1f1f1;
+}
+#init{
+    border: none;
+    border-radius: 3px;
+    font-size: 1rem;
+    background-color: #247BA0;
+    color: #f1f1f1;
+    padding: 8px 28px;
+}
+#init:hover {
+    background-color: #011627;
+  }
+  
+/* css for settings area and colapsibles*/
+h3{
+  color: #444;
+  margin: 20px;
+  padding:18px 18px 18px 0px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 2rem;
+}
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 1.3rem;
+  }
+.buttons{
+    margin: 20px;
+}
+  .active, .collapsible:hover {
+    background-color: #555;
+  }
+  
+  .content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;}

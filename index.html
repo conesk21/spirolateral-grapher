@@ -9,32 +9,54 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <nav>
     <h1>Spirolateral Grapher</h1>
+    </nav>
+   
 
 
     <!-- container for all canvas/button elements-->
-    <div class="content">
-        <!-- container for canvas elements-->
-        <div class="canvas-holder">
-              <canvas class = "lower canvas" id="lowerCanvas" height="760px" width="760px"></canvas>
-              <canvas class = "upper canvas" id="upperCanvas" height="760px" width="760px"></canvas>
-          
-        </div>
-
-         <!-- container for input/buttons-->
-        <div class="mutables">
-            <div class="input-holder">
-                    <label for="value-string">Input 1 or more comma separated integers: </label>
+    <section class="tool">
+        <div class="drawer">
+        <div class = "elements"> 
+            <h3>spirolateral grapher</h3>
+            <div class="input-label">input any number of integers separated by commas to form the value array of a spirolateral graph</div>
+          <div class="input-holder">
+                   
                     <input name="valueString" id="value-string" type="text" pattern="^[0-9]+(,[0-9]+)*$" placeholder="1,2,3" >
-                    <button type="submit" id="init">Spirolateralize!</button>
-            </div>
-            <div class="button-holder">
-
+                    <button type="submit" id="init">spirolateralize</button>
+            </div>  
+            <!-- container for canvas elements-->
+            <div class="canvas-holder">
+                <canvas class = "lower canvas" id="lowerCanvas" height="760px" width="760px"></canvas>
+                <canvas class = "upper canvas" id="upperCanvas" height="760px" width="760px"></canvas>
+            
             </div>
         </div>
+        
 
+         <!-- container for settings -->
+        <div class="settings">
+        <h3 >settings</h3>
+        <div class="buttons">
+        <button type="button" class="collapsible">graph </button>
+            <div class="content">
+            <p> add selectors for color, line weight, visual size</p>
+             </div>
+                    
+        <button type="button" class="collapsible">grid </button>
+            <div class="content">
+            <p>add selectors for foreground color, background color, line weight, and transparency </p>
+            </div>
+        <button type="button" class="collapsible">draw</button>
+            <div class="content">
+            <p>add selectors for animated draw, draw one iteration</p>
+            </div>
+        </div>
+    </div>
 
     </div>
+    </section>
     
 </body>
 </html>
