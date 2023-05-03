@@ -10,11 +10,15 @@ const canDirectArray = [[0,1], [1,-1], [0,-1], [1,1]]
 const canvas = document.querySelector("#upperCanvas");
 const drawer = canvas.getContext("2d")
 const grid = document.querySelector("#lowerCanvas")
+const gridDrawer = grid.getContext("2d")
 const center = [canvas.width/2,canvas.height/2]
 // the percentage of canvas space that each graph takes up
 const visualSize = .7
 var valArray = [1,2,3]
 var scalar = getScaleFactor(valArray)
+var axisColor = "#000000"
+var gridColor = "#000000"
+var backgroundColor = "#FFFFFF"
 
 
 
@@ -80,12 +84,11 @@ function getValArray(string){
     return valueArray
 }
 
-function drawGraph(array,scaleFactor){
+function drawGraph(newOrigin, array,scaleFactor){
    
     drawer.lineCap = "square"
     drawer.translate(center[0],center[1])
-    let graphCenter = getCenterPoint(array)
-    let currentPos = [-(graphCenter[0]*scaleFactor), (graphCenter[1]*scaleFactor)]
+    let currentPos = newOrigin
      drawer.beginPath()
      drawer.moveTo(currentPos[0],currentPos[1])
     for (let j=0; j<getNumberofIterations(array.length);j++){
@@ -100,22 +103,31 @@ function drawGraph(array,scaleFactor){
 
 }
 
+function drawAxis(origin){
+    gridDrawer.strokeStyle = axisColor
+    gridDrawer.beginPath()
+    gridDrawer.moveTo(0,origin[1]+center[1])
+    gridDrawer.lineTo(canvas.height,origin[1]+center[1])
+    gridDrawer.moveTo(origin[0]+center[0],0)
+    gridDrawer.lineTo(origin[0]+center[0],canvas.width)
+    gridDrawer.stroke()
+   
+}
+
 function handleGraph(){
     drawer.setTransform(1, 0, 0, 1, 0, 0);
     drawer.clearRect(0, 0, canvas.width, canvas.height);
+    gridDrawer.setTransform(1, 0, 0, 1, 0, 0);
+    gridDrawer.clearRect(0, 0, canvas.width, canvas.height);
     let valString = document.getElementById("value-string").value;
     valArray = getValArray(valString)
     scalar = getScaleFactor(valArray)
-    drawGraph(valArray,scalar)
+    let graphCenter = getCenterPoint(valArray)
+    let translatedOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
+    drawAxis(translatedOrigin)
+    drawGraph(translatedOrigin,valArray,scalar)
 }
 
-
-let test = grid.getContext("2d")
-test.moveTo(0,canvas.width/2)
-test.lineTo(canvas.height,canvas.width/2)
-test.moveTo(canvas.height/2,0)
-test.lineTo(canvas.height/2,canvas.width)
-test.stroke()
 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleGraph)
@@ -134,5 +146,4 @@ for (i = 0; i < collapsableButtons.length; i++) {
     }
   });
 }
-
 
