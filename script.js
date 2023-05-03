@@ -17,7 +17,7 @@ const visualSize = .7
 var valArray = [1,2,3]
 var scalar = getScaleFactor(valArray)
 var axisColor = "#000000"
-var gridColor = "#000000"
+var gridColor = "#6A6C6E"
 var backgroundColor = "#FFFFFF"
 
 
@@ -111,7 +111,35 @@ function drawAxis(origin){
     gridDrawer.moveTo(origin[0]+center[0],0)
     gridDrawer.lineTo(origin[0]+center[0],canvas.width)
     gridDrawer.stroke()
-   
+    gridDrawer.closePath()
+}
+
+function drawGrid(origin,boxSize){
+    
+    gridDrawer.beginPath();
+
+    for (x = origin[0]+center[0]; x <= canvas.width+center[0]; x += boxSize) {
+        gridDrawer.moveTo(x, 0);
+        gridDrawer.lineTo(x, canvas.height);
+    }
+
+    for (x = origin[0]+center[0]; x >= 0; x -= boxSize) {
+        gridDrawer.moveTo(x, 0);
+        gridDrawer.lineTo(x, canvas.height);
+    }
+
+    for (y = origin[1]+center[1]; y <= canvas.height+center[1]; y += boxSize) {
+        gridDrawer.moveTo(0, y);
+        gridDrawer.lineTo(canvas.width, y);
+    }
+    for (y = origin[1]+center[1]; y >= 0; y -= boxSize) {
+        gridDrawer.moveTo(0, y);
+        gridDrawer.lineTo(canvas.width, y);
+    }
+
+  gridDrawer.strokeStyle = gridColor
+  gridDrawer.stroke();
+  gridDrawer.closePath();
 }
 
 function handleGraph(){
@@ -125,9 +153,11 @@ function handleGraph(){
     let graphCenter = getCenterPoint(valArray)
     let translatedOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
     drawAxis(translatedOrigin)
+    drawGrid(translatedOrigin,scalar)
     drawGraph(translatedOrigin,valArray,scalar)
 }
 
+drawGrid([0,0],10)
 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleGraph)
