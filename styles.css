@@ -119,9 +119,37 @@ h3{
   .active, .collapsible:hover {
     background-color: #555;
   }
+.mutables{
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
   
   .content {
     padding: 0 18px;
     display: none;
     overflow: hidden;
     background-color: #f1f1f1;}
+
+
+label{
+    font-size: 1.1rem;
+    color: #444;
+    padding: 4px;
+}
+
+.button-holder{
+    display:flex;
+    align-items: center;
+}
+
+input[type="color"] {
+    appearance: none;
+    background: none;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    height: 60px;
+    padding: 0;
+    width: 60px;
+  }

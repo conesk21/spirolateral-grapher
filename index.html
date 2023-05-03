@@ -41,12 +41,46 @@
         <div class="buttons">
         <button type="button" class="collapsible">graph </button>
             <div class="content">
-            <p> add selectors for color, line weight, visual size</p>
+                <div class="mutables">
+                <div class="button-holder">
+                    <input type="color" id="graph-color" value="#000000">
+                    <label for="axis">graph color</label>
+                </div>
+                <div class="button-holder">
+                <input type="range" id="graph-weight"  min="1" max="30">
+                <label for="volume">line weight</label>
+                </div>
+                <div class="button-holder">
+                <input type="range" id="visual-size"  min="10" max="90">
+                <label for="volume">visual size</label>
+                </div>
+                </div>
              </div>
                     
         <button type="button" class="collapsible">grid </button>
             <div class="content">
-            <p>add selectors for foreground color, background color, line weight, and transparency </p>
+                <div class="mutables">
+                <div class="button-holder">
+                <input type="color" id="axis" value="#000000">
+                <label for="axis">axis color</label>
+                </div>
+                <div class="button-holder">
+                 <input type="color" id="grid" value="#6A6C6E">
+                <label for="grid">grid color</label>
+                </div>
+                <div class="button-holder">
+                <input type="color" id="background" value="#FFFFFF">
+                <label for="background">background color</label>
+                </div>
+                <div class="button-holder">
+                <input type="range" id="axis-weight"  min="1" max="20">
+                <label for="volume">axis line weight</label>
+                </div>
+                <div class="button-holder">
+                <input type="range" id="axis-weight"  min="1" max="20">
+                <label for="volume">grid line weight</label>
+                </div>
+                </div>
             </div>
         <button type="button" class="collapsible">draw</button>
             <div class="content">

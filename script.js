@@ -157,7 +157,7 @@ function handleGraph(){
     drawGraph(translatedOrigin,valArray,scalar)
 }
 
-drawGrid([0,0],10)
+
 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleGraph)
