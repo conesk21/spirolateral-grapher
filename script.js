@@ -13,12 +13,20 @@ const grid = document.querySelector("#lowerCanvas")
 const gridDrawer = grid.getContext("2d")
 const center = [canvas.width/2,canvas.height/2]
 // the percentage of canvas space that each graph takes up
-const visualSize = .7
+var visualSize = .7
 var valArray = [1,2,3]
 var scalar = getScaleFactor(valArray)
+var graphColor = "#000000"
+var graphWeight = 2
+var showAxis = true 
 var axisColor = "#000000"
+var axisWeight = 1
+var showGrid = true
 var gridColor = "#6A6C6E"
+var gridWeight = 1
+var showBackground = false
 var backgroundColor = "#FFFFFF"
+
 
 
 
@@ -90,12 +98,15 @@ function drawGraph(newOrigin, array,scaleFactor){
     drawer.translate(center[0],center[1])
     let currentPos = newOrigin
      drawer.beginPath()
+     drawer.line
      drawer.moveTo(currentPos[0],currentPos[1])
     for (let j=0; j<getNumberofIterations(array.length);j++){
         for(let i=0; i<array.length;i++){
             let index = (i + j*array.length) % 4
             currentPos[canDirectArray[index][0]] += canDirectArray[index][1]*array[i] *scaleFactor
             drawer.lineTo(currentPos[0],currentPos[1])
+            drawer.strokeStyle = graphColor
+            drawer.lineWidth = graphWeight
             drawer.stroke()
         }
 
@@ -105,6 +116,7 @@ function drawGraph(newOrigin, array,scaleFactor){
 
 function drawAxis(origin){
     gridDrawer.strokeStyle = axisColor
+    gridDrawer.lineWidth = axisWeight
     gridDrawer.beginPath()
     gridDrawer.moveTo(0,origin[1]+center[1])
     gridDrawer.lineTo(canvas.height,origin[1]+center[1])
@@ -138,6 +150,7 @@ function drawGrid(origin,boxSize){
     }
 
   gridDrawer.strokeStyle = gridColor
+  gridDrawer.lineWidth = gridWeight
   gridDrawer.stroke();
   gridDrawer.closePath();
 }
@@ -152,11 +165,24 @@ function handleGraph(){
     scalar = getScaleFactor(valArray)
     let graphCenter = getCenterPoint(valArray)
     let translatedOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
-    drawAxis(translatedOrigin)
-    drawGrid(translatedOrigin,scalar)
+    if (showGrid){
+       drawGrid(translatedOrigin,scalar) 
+    }
+    if(showAxis){
+     drawAxis(translatedOrigin)   
+    }
     drawGraph(translatedOrigin,valArray,scalar)
 }
 
+function handleBackground(){
+    if (showBackground){
+        grid.style.backgroundColor=backgroundColor
+        
+    } else{
+        grid.style.removeProperty('background-color')
+        
+    }
+}
 
 
 const intitButton = document.querySelector("#init")
@@ -176,4 +202,97 @@ for (i = 0; i < collapsableButtons.length; i++) {
     }
   });
 }
+
+const graphPicker = document.querySelector("#graph-color");
+graphPicker.addEventListener("input", (event)=>{
+    graphColor = event.target.value;
+    handleGraph()
+}, false)
+
+const graphRange = document.querySelector("#graph-weight");
+graphRange.addEventListener("input", (event)=>{
+    graphWeight = event.target.value
+    handleGraph()
+}, false)
+
+const graphSize = document.querySelector("#visual-size");
+graphSize.addEventListener("input", (event)=>{
+    visualSize = event.target.value/100
+    handleGraph()
+}, false)
+
+
+const axisPicker=document.querySelector("#axis-color")
+const axisRange=document.querySelector("#axis-weight")
+
+const buttonAxis = document.querySelector('#axis')
+buttonAxis.addEventListener("click", ()=>{
+    showAxis = !showAxis
+    if(showAxis){
+        buttonAxis.classList.remove("button-off")
+    } else {
+        buttonAxis.classList.add("button-off")
+    }
+    axisPicker.disabled = !axisPicker.disabled
+    axisRange.disabled = !axisRange.disabled
+    handleGraph()
+})
+
+axisPicker.addEventListener('input',(event)=>{
+    axisColor = event.target.value;
+    handleGraph()
+})
+
+axisRange.addEventListener('input',(event)=>{
+    axisWeight = event.target.value
+    handleGraph()
+})
+
+
+const gridPicker=document.querySelector("#grid-color")
+const gridRange=document.querySelector("#grid-weight")
+
+const buttonGrid = document.querySelector('#grid')
+buttonGrid.addEventListener("click", ()=>{
+    showGrid = !showGrid
+    if(showGrid){
+        buttonGrid.classList.remove("button-off")
+    } else {
+        buttonGrid.classList.add("button-off")
+    }
+    gridPicker.disabled = !gridPicker.disabled
+    gridRange.disabled = !gridRange.disabled
+    handleGraph()
+})
+
+gridPicker.addEventListener('input',(event)=>{
+    gridColor = event.target.value;
+    handleGraph()
+})
+
+gridRange.addEventListener('input',(event)=>{
+    gridWeight = event.target.value
+    handleGraph()
+})
+
+const backgroundPicker=document.querySelector("#background-color")
+
+const buttonBackground = document.querySelector('#background')
+buttonBackground.addEventListener("click", ()=>{
+    showBackground = !showBackground
+    if(showBackground){
+        buttonBackground.classList.remove("button-off")
+    } else {
+        buttonBackground.classList.add("button-off")
+    }
+    backgroundPicker.disabled = !backgroundPicker.disabled
+    
+    handleBackground()
+})
+
+backgroundPicker.addEventListener('input',(event)=>{
+    backgroundColor = event.target.value;
+    handleBackground()
+})
+
 
