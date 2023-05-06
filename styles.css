@@ -258,3 +258,9 @@ input[type="color"]{
     outline: 3px solid #247BA0;
     outline-offset: 0.125rem;
   }
+
+  .selected{
+    background-color: #011627;
+    border:2px #247BA0 solid;
+    color: #247BA0;
+  }

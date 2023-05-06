@@ -12,6 +12,7 @@ const drawer = canvas.getContext("2d")
 const grid = document.querySelector("#lowerCanvas")
 const gridDrawer = grid.getContext("2d")
 const center = [canvas.width/2,canvas.height/2]
+const timer = ms => new Promise(res => setTimeout(res, ms))
 // the percentage of canvas space that each graph takes up
 var visualSize = .7
 var valArray = [1,2,3]
@@ -26,6 +27,8 @@ var gridColor = "#6A6C6E"
 var gridWeight = 1
 var showBackground = false
 var backgroundColor = "#FFFFFF"
+var animate = false
+var drawOne = false
 
 
 
@@ -92,27 +95,32 @@ function getValArray(string){
     return valueArray
 }
 
-function drawGraph(newOrigin, array,scaleFactor){
-   
-    drawer.lineCap = "square"
+async function drawGraph(newOrigin, iterations, array,scaleFactor){
     drawer.translate(center[0],center[1])
-    let currentPos = newOrigin
-     drawer.beginPath()
-     drawer.line
-     drawer.moveTo(currentPos[0],currentPos[1])
-    for (let j=0; j<getNumberofIterations(array.length);j++){
+    
+    let currentPos = newOrigin 
+    for (let j=0; j<iterations;j++){
         for(let i=0; i<array.length;i++){
+            drawer.beginPath()
+            drawer.moveTo(currentPos[0],currentPos[1])
             let index = (i + j*array.length) % 4
             currentPos[canDirectArray[index][0]] += canDirectArray[index][1]*array[i] *scaleFactor
             drawer.lineTo(currentPos[0],currentPos[1])
             drawer.strokeStyle = graphColor
             drawer.lineWidth = graphWeight
+            drawer.lineCap = "round";
+            drawer.closePath()
             drawer.stroke()
+            if (animate){
+                await timer(500);
+            }
         }
 
     }
 
 }
+
+
 
 function drawAxis(origin){
     gridDrawer.strokeStyle = axisColor
@@ -171,7 +179,13 @@ function handleGraph(){
     if(showAxis){
      drawAxis(translatedOrigin)   
     }
-    drawGraph(translatedOrigin,valArray,scalar)
+    if(drawOne){
+        drawGraph(translatedOrigin,1,valArray,scalar)
+    } else {
+        drawGraph(translatedOrigin,getNumberofIterations(valArray),valArray,scalar)
+    }
+
+    
 }
 
 function handleBackground(){
@@ -184,10 +198,11 @@ function handleBackground(){
     }
 }
 
-
+// init button 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleGraph)
 
+// colapsable settings buttons 
 var collapsableButtons = document.getElementsByClassName("collapsible");
 var i;
 
@@ -203,6 +218,7 @@ for (i = 0; i < collapsableButtons.length; i++) {
   });
 }
 
+// buttons and functions for graph color weight and size 
 const graphPicker = document.querySelector("#graph-color");
 graphPicker.addEventListener("input", (event)=>{
     graphColor = event.target.value;
@@ -221,6 +237,7 @@ graphSize.addEventListener("input", (event)=>{
     handleGraph()
 }, false)
 
+// buttons and functions for axis, grid and background
 
 const axisPicker=document.querySelector("#axis-color")
 const axisRange=document.querySelector("#axis-weight")
@@ -295,4 +312,46 @@ backgroundPicker.addEventListener('input',(event)=>{
     handleBackground()
 })
 
+// buttons and functions for draw + animations 
 
+const iterationDraw = document.querySelector('#draw-one')
+iterationDraw.addEventListener('click', ()=>{
+    animate = false 
+    drawOne = true
+    iterationDraw.classList.add("selected")
+    iteratioinAnimate.classList.remove("selected")
+    drawAll.classList.remove("selected")
+    animateAll.classList.remove("selected")
+    handleGraph()
+})
+
+const iteratioinAnimate = document.querySelector('#animate-one')
+iteratioinAnimate.addEventListener('click',()=>{
+    animate = true 
+    drawOne = true
+    iterationDraw.classList.remove("selected")
+    iteratioinAnimate.classList.add("selected")
+    drawAll.classList.remove("selected")
+    animateAll.classList.remove("selected")
+    handleGraph()
+})
+const drawAll = document.querySelector('#draw-all')
+drawAll.addEventListener('click',()=>{
+    animate = false
+    drawOne = false
+    iterationDraw.classList.remove("selected")
+    iteratioinAnimate.classList.remove("selected")
+    drawAll.classList.add("selected")
+    animateAll.classList.remove("selected")
+    handleGraph()
+})
+const animateAll = document.querySelector('#animate-all')
+animateAll.addEventListener('click',()=>{
+    animate = true
+    drawOne = false
+    iterationDraw.classList.remove("selected")
+    iteratioinAnimate.classList.remove("selected")
+    drawAll.classList.remove("selected")
+    animateAll.classList.add("selected")
+    handleGraph()
+})
