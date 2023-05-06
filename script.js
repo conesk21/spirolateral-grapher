@@ -17,6 +17,7 @@ const timer = ms => new Promise(res => setTimeout(res, ms))
 var visualSize = .7
 var valArray = [1,2,3]
 var scalar = getScaleFactor(valArray)
+var newOrigin = [1,2]
 var graphColor = "#000000"
 var graphWeight = 2
 var showAxis = true 
@@ -28,7 +29,7 @@ var gridWeight = 1
 var showBackground = false
 var backgroundColor = "#FFFFFF"
 var animate = false
-var drawOne = false
+var iterations = getNumberofIterations(valArray)
 
 
 
@@ -95,16 +96,15 @@ function getValArray(string){
     return valueArray
 }
 
-async function drawGraph(newOrigin, iterations, array,scaleFactor){
+async function drawGraph(iterations){
     drawer.translate(center[0],center[1])
-    
     let currentPos = newOrigin 
     for (let j=0; j<iterations;j++){
-        for(let i=0; i<array.length;i++){
+        for(let i=0; i<valArray.length;i++){
             drawer.beginPath()
             drawer.moveTo(currentPos[0],currentPos[1])
-            let index = (i + j*array.length) % 4
-            currentPos[canDirectArray[index][0]] += canDirectArray[index][1]*array[i] *scaleFactor
+            let index = (i + j*valArray.length) % 4
+            currentPos[canDirectArray[index][0]] += canDirectArray[index][1]*valArray[i] *scalar
             drawer.lineTo(currentPos[0],currentPos[1])
             drawer.strokeStyle = graphColor
             drawer.lineWidth = graphWeight
@@ -122,37 +122,37 @@ async function drawGraph(newOrigin, iterations, array,scaleFactor){
 
 
 
-function drawAxis(origin){
+function drawAxis(){
     gridDrawer.strokeStyle = axisColor
     gridDrawer.lineWidth = axisWeight
     gridDrawer.beginPath()
-    gridDrawer.moveTo(0,origin[1]+center[1])
-    gridDrawer.lineTo(canvas.height,origin[1]+center[1])
-    gridDrawer.moveTo(origin[0]+center[0],0)
-    gridDrawer.lineTo(origin[0]+center[0],canvas.width)
+    gridDrawer.moveTo(0,newOrigin[1]+center[1])
+    gridDrawer.lineTo(canvas.height,newOrigin[1]+center[1])
+    gridDrawer.moveTo(newOrigin[0]+center[0],0)
+    gridDrawer.lineTo(newOrigin[0]+center[0],canvas.width)
     gridDrawer.stroke()
     gridDrawer.closePath()
 }
 
-function drawGrid(origin,boxSize){
+function drawGrid(){
     
     gridDrawer.beginPath();
 
-    for (x = origin[0]+center[0]; x <= canvas.width+center[0]; x += boxSize) {
+    for (x = newOrigin[0]+center[0]; x <= canvas.width+center[0]; x += scalar) {
         gridDrawer.moveTo(x, 0);
         gridDrawer.lineTo(x, canvas.height);
     }
 
-    for (x = origin[0]+center[0]; x >= 0; x -= boxSize) {
+    for (x = newOrigin[0]+center[0]; x >= 0; x -= scalar) {
         gridDrawer.moveTo(x, 0);
         gridDrawer.lineTo(x, canvas.height);
     }
 
-    for (y = origin[1]+center[1]; y <= canvas.height+center[1]; y += boxSize) {
+    for (y = newOrigin[1]+center[1]; y <= canvas.height+center[1]; y += scalar) {
         gridDrawer.moveTo(0, y);
         gridDrawer.lineTo(canvas.width, y);
     }
-    for (y = origin[1]+center[1]; y >= 0; y -= boxSize) {
+    for (y = newOrigin[1]+center[1]; y >= 0; y -= scalar) {
         gridDrawer.moveTo(0, y);
         gridDrawer.lineTo(canvas.width, y);
     }
@@ -164,29 +164,35 @@ function drawGrid(origin,boxSize){
 }
 
 function handleGraph(){
+    let graphCenter = getCenterPoint(valArray)
+    newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
     drawer.setTransform(1, 0, 0, 1, 0, 0);
     drawer.clearRect(0, 0, canvas.width, canvas.height);
+    drawGraph(iterations)
+
+    
+}
+ function handleLower(){
     gridDrawer.setTransform(1, 0, 0, 1, 0, 0);
     gridDrawer.clearRect(0, 0, canvas.width, canvas.height);
+    if (showGrid){
+        drawGrid() 
+     }
+     if(showAxis){
+      drawAxis()   
+     }
+ }
+
+ function handleInput(){
     let valString = document.getElementById("value-string").value;
     valArray = getValArray(valString)
     scalar = getScaleFactor(valArray)
     let graphCenter = getCenterPoint(valArray)
-    let translatedOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
-    if (showGrid){
-       drawGrid(translatedOrigin,scalar) 
-    }
-    if(showAxis){
-     drawAxis(translatedOrigin)   
-    }
-    if(drawOne){
-        drawGraph(translatedOrigin,1,valArray,scalar)
-    } else {
-        drawGraph(translatedOrigin,getNumberofIterations(valArray),valArray,scalar)
-    }
+    newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
+    handleLower()
+    handleGraph()
 
-    
-}
+ }
 
 function handleBackground(){
     if (showBackground){
@@ -200,7 +206,7 @@ function handleBackground(){
 
 // init button 
 const intitButton = document.querySelector("#init")
-intitButton.addEventListener('click', handleGraph)
+intitButton.addEventListener('click', handleInput)
 
 // colapsable settings buttons 
 var collapsableButtons = document.getElementsByClassName("collapsible");
@@ -222,20 +228,69 @@ for (i = 0; i < collapsableButtons.length; i++) {
 const graphPicker = document.querySelector("#graph-color");
 graphPicker.addEventListener("input", (event)=>{
     graphColor = event.target.value;
-    handleGraph()
+    if(animate){
+        animate = false
+        handleGraph()
+        animate = true
+    } else {
+        handleGraph()
+    }
 }, false)
-
+graphPicker.addEventListener("change", (event)=>{
+    graphColor = event.target.value;
+    if(animate){
+        handleGraph()
+    }
+})
 const graphRange = document.querySelector("#graph-weight");
 graphRange.addEventListener("input", (event)=>{
     graphWeight = event.target.value
-    handleGraph()
+    if(animate){
+        animate = false
+        handleGraph()
+        animate = true 
+    } else {
+        handleGraph()
+    }
+    
 }, false)
+graphRange.addEventListener("change", (event)=>{
+    graphWeight = event.target.value
+    if (animate){
+        handleGraph()
+    }
+}, false)
+
+graphRange.addEventListener
 
 const graphSize = document.querySelector("#visual-size");
 graphSize.addEventListener("input", (event)=>{
     visualSize = event.target.value/100
-    handleGraph()
+        scalar = getScaleFactor(valArray)
+        let graphCenter = getCenterPoint(valArray)
+        newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
+    if (animate){
+        animate = false 
+        handleLower()
+        handleGraph()
+        animate = true
+    } else {
+        handleLower()
+        handleGraph()
+    }
+    
 }, false)
+
+graphSize.addEventListener("change", (event)=>{
+    visualSize = event.target.value/100
+    scalar = getScaleFactor(valArray)
+    let graphCenter = getCenterPoint(valArray)
+    newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
+    if (animate){
+        handleLower()
+        handleGraph()
+    }
+})
 
 // buttons and functions for axis, grid and background
 
@@ -252,17 +307,17 @@ buttonAxis.addEventListener("click", ()=>{
     }
     axisPicker.disabled = !axisPicker.disabled
     axisRange.disabled = !axisRange.disabled
-    handleGraph()
+    handleLower()
 })
 
 axisPicker.addEventListener('input',(event)=>{
     axisColor = event.target.value;
-    handleGraph()
+    handleLower()
 })
 
 axisRange.addEventListener('input',(event)=>{
     axisWeight = event.target.value
-    handleGraph()
+    handleLower()
 })
 
 
@@ -279,17 +334,17 @@ buttonGrid.addEventListener("click", ()=>{
     }
     gridPicker.disabled = !gridPicker.disabled
     gridRange.disabled = !gridRange.disabled
-    handleGraph()
+    handleLower()
 })
 
 gridPicker.addEventListener('input',(event)=>{
     gridColor = event.target.value;
-    handleGraph()
+    handleLower()
 })
 
 gridRange.addEventListener('input',(event)=>{
     gridWeight = event.target.value
-    handleGraph()
+    handleLower()
 })
 
 const backgroundPicker=document.querySelector("#background-color")
@@ -317,28 +372,32 @@ backgroundPicker.addEventListener('input',(event)=>{
 const iterationDraw = document.querySelector('#draw-one')
 iterationDraw.addEventListener('click', ()=>{
     animate = false 
-    drawOne = true
+    iterations = 1
     iterationDraw.classList.add("selected")
     iteratioinAnimate.classList.remove("selected")
     drawAll.classList.remove("selected")
     animateAll.classList.remove("selected")
+    let graphCenter = getCenterPoint(valArray)
+    newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
     handleGraph()
 })
 
 const iteratioinAnimate = document.querySelector('#animate-one')
 iteratioinAnimate.addEventListener('click',()=>{
     animate = true 
-    drawOne = true
+    iterations = 1
     iterationDraw.classList.remove("selected")
     iteratioinAnimate.classList.add("selected")
     drawAll.classList.remove("selected")
     animateAll.classList.remove("selected")
+    let graphCenter = getCenterPoint(valArray)
+    newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
     handleGraph()
 })
 const drawAll = document.querySelector('#draw-all')
 drawAll.addEventListener('click',()=>{
     animate = false
-    drawOne = false
+    iterations = getNumberofIterations(valArray)
     iterationDraw.classList.remove("selected")
     iteratioinAnimate.classList.remove("selected")
     drawAll.classList.add("selected")
@@ -348,7 +407,7 @@ drawAll.addEventListener('click',()=>{
 const animateAll = document.querySelector('#animate-all')
 animateAll.addEventListener('click',()=>{
     animate = true
-    drawOne = false
+    iterations = getNumberofIterations(valArray)
     iterationDraw.classList.remove("selected")
     iteratioinAnimate.classList.remove("selected")
     drawAll.classList.remove("selected")
