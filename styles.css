@@ -297,7 +297,7 @@ input[type="color"]{
     font-style: light;
   }
 p:first-of-type{
-margin-top: -10;
+margin-top: 10px;
 }
  p:last-of-type{
     margin-bottom: 20px;

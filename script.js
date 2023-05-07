@@ -250,6 +250,29 @@ function handleAttributes(center){
     }
 
 }
+
+
+
+
+function handleSave(){
+    let downloadLink = document.createElement('a');
+	downloadLink.setAttribute('download', valArray.toString()+'.png');
+    var ctx1 = grid.getContext("2d");
+    var ctx2 = canvas.getContext("2d");
+    if(showBackground){
+        ctx1.globalCompositeOperation = 'destination-over'
+        ctx1.fillStyle = backgroundColor;
+        ctx1.fillRect(0, 0, canvas.width, canvas.height);
+        ctx1.globalCompositeOperation = 'source-over'
+    }
+    ctx1.drawImage(canvas, 0, 0);
+    grid.toBlob(function(blob) {
+        let url = URL.createObjectURL(blob);
+        downloadLink.setAttribute('href', url);
+        downloadLink.click();
+    })
+    handleLower()
+}
 // init button 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleInput)
@@ -460,3 +483,6 @@ animateAll.addEventListener('click',()=>{
     animateAll.classList.add("selected")
     handleGraph()
 })
+
+const saveImageButton = document.getElementById("img")
+saveImageButton.addEventListener('click', handleSave)
