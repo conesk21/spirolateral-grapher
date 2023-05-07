@@ -19,7 +19,7 @@ var valArray = [1,2,3]
 var scalar = getScaleFactor(valArray)
 var newOrigin = [1,2]
 var graphColor = "#000000"
-var graphWeight = 2
+var graphWeight = 3
 var showAxis = true 
 var axisColor = "#000000"
 var axisWeight = 1
@@ -96,19 +96,42 @@ function getValArray(string){
     return valueArray
 }
 
+function isClosed(array){
+    if (array.length% 4 === 2){
+        return 2
+    } else if (array.length%2==1){
+        return 4 
+    } else {
+        let currentPos = [0,0]
+            for(let i=0; i<array.length;i++){
+                let index = i% 4
+                currentPos[directArray[index][0]] += directArray[index][1]*array[i]
+            }
+
+        console.log(currentPos)
+        if (currentPos[0] === 0 & currentPos[1] ===0){
+            return 1
+        }
+        return -1
+        }
+       
+
+    }
+
+
 async function drawGraph(iterations){
     drawer.translate(center[0],center[1])
     let currentPos = newOrigin 
     for (let j=0; j<iterations;j++){
         for(let i=0; i<valArray.length;i++){
-            drawer.beginPath()
+            drawer.beginPath() 
+            drawer.lineCap = "round"
             drawer.moveTo(currentPos[0],currentPos[1])
             let index = (i + j*valArray.length) % 4
             currentPos[canDirectArray[index][0]] += canDirectArray[index][1]*valArray[i] *scalar
             drawer.lineTo(currentPos[0],currentPos[1])
             drawer.strokeStyle = graphColor
             drawer.lineWidth = graphWeight
-            drawer.lineCap = "round";
             drawer.closePath()
             drawer.stroke()
             if (animate){
@@ -119,8 +142,6 @@ async function drawGraph(iterations){
     }
 
 }
-
-
 
 function drawAxis(){
     gridDrawer.strokeStyle = axisColor
@@ -188,6 +209,7 @@ function handleGraph(){
     valArray = getValArray(valString)
     scalar = getScaleFactor(valArray)
     let graphCenter = getCenterPoint(valArray)
+    handleAttributes(graphCenter)
     newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
     handleLower()
     handleGraph()
@@ -204,6 +226,30 @@ function handleBackground(){
     }
 }
 
+function handleAttributes(center){
+    let disc = isClosed(valArray)
+    let valCopy = document.getElementById("val-copy")
+    let closure = document.getElementById("closure")
+    let boundingBox = document.getElementById("bb")
+    let centerDisplay = document.getElementById("cent")
+    
+    valCopy.textContent= valArray.toString();
+    if (disc >0){
+        let size = getBoundingBoxSize(getCorners(valArray,iterations))
+        boundingBox.textContent = size.toString() + " by " + size.toString()
+        centerDisplay.textContent = "( " + center[0].toString() + " , " + center[1].toString() + " )"
+        if (disc === 1){
+            closure.textContent = "unexpectedly closed after " + disc.toString() + " iteration"
+        } else {
+            closure.textContent = "closed after " + disc.toString() + " iterations"
+        }
+    } else {
+        closure.textContent = "unclosed"
+        boundingBox.textContent = "nonexistant (infinitely large)"
+        centerDisplay.textContent = "undetermined"
+    }
+
+}
 // init button 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleInput)

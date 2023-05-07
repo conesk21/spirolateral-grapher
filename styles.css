@@ -14,8 +14,7 @@
     gap: 16px;
   }
 
-  .elements,.settings {
-     flex: 1; 
+  .elements,.settings, .attributes {
      background-color: #CCCCCC;
    
   }
@@ -23,7 +22,17 @@
     flex-shrink: 0;
     flex-grow: 0;
   }
+  .settings, .attributes{
+   
 
+  }
+.anti-tool{
+  display:flex;
+  flex-direction: column;
+  gap:16px;
+  flex: 1;
+
+}
 /*css for canvases*/
 .canvas-holder {
     position: relative;
@@ -169,17 +178,25 @@ button{
     padding: 8px 28px;
 
 }
+
 button:hover{
-  background-color: #217092;
+  background-color: #1B6382
 }
 
 .button-off{
   background-color: #011627;
-  color:#247BA0;
+  
 }
 .button-off:hover{
-  background-color: #011627;
+  background-color: #01101E;
 }
+input:disabled{
+  opacity: .3;
+}
+input:disabled+label {
+  opacity: .3;
+}
+
 
 input[type="color"]{
     -webkit-appearance: none;
@@ -264,3 +281,32 @@ input[type="color"]{
     border:2px #247BA0 solid;
     color: #247BA0;
   }
+  .selected:hover{
+    background-color:#011627;
+    color:#f1f1f1;
+    border: 2px #f1f1f1 solid;
+
+  }
+
+  /* styling for the graph attributes section */
+
+  p{
+    color:#555;
+    margin: 0px 0px 10px 20px;
+    font-size: 1.3rem; 
+    font-style: light;
+  }
+p:first-of-type{
+margin-top: -10;
+}
+ p:last-of-type{
+    margin-bottom: 20px;
+  }
+
+  span:not(:empty){
+    background-color: #f1f1f1;
+    border-radius: 3px;
+    padding: 3px
+  }
+
+  
