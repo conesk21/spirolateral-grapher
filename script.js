@@ -205,7 +205,7 @@ function handleGraph(){
  }
 
  function handleInput(){
-    let valString = document.getElementById("value-string").value;
+    let valString = document.getElementById("value-string").value
     valArray = getValArray(valString)
     scalar = getScaleFactor(valArray)
     let graphCenter = getCenterPoint(valArray)
@@ -273,9 +273,32 @@ function handleSave(){
     })
     handleLower()
 }
+
+const input = document.getElementById("value-string")
+input.addEventListener('input', (e) => {
+    const isValid = e.target.checkValidity();
+    intitButton.disabled = !isValid
+  });
+
+  input.addEventListener('change', (e) => {
+    const isValid = e.target.reportValidity();
+    e.target.setAttribute('aria-invalid', !isValid);
+    intitButton.disabled = !isValid
+  });
+
 // init button 
 const intitButton = document.querySelector("#init")
 intitButton.addEventListener('click', handleInput)
+document.addEventListener('keypress', (event)=>{
+    if (event.key === "Enter") {
+    const isValid = input.reportValidity();
+    if(isValid){
+     handleInput()
+    }
+}
+});
+
+
 
 // colapsable settings buttons 
 var collapsableButtons = document.getElementsByClassName("collapsible");

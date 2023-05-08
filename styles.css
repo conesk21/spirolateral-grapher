@@ -47,6 +47,9 @@ a{
 }
 .example{
   padding: 50px 100px 40px 100px;
+  display:flex ;
+  justify-content: center;
+  align-items: center;
 }
 h1 {
   font-size: 4rem;
@@ -137,7 +140,7 @@ canvas {
 #value-string:focus{
     background-color: #247BA0;
     color:  #E5E5E5;
-    font-size: 1rem;
+    font-size: 1.8rem;
     border:none;
 }
 #value-string:focus::placeholder{
