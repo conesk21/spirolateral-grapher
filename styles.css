@@ -279,10 +279,9 @@ input[type="color"]{
   padding-bottom: 10px;
 }
   #color-holder{
-    border-bottom: 1px #999 solid;
-    border-top: 1px #999 solid;
+    
     border-radius: 1px;
-    padding: 10px;
+    padding: 5px 0px 20px;
     display:flex;
     align-items: center;
     justify-content: flex-start;
@@ -372,6 +371,9 @@ margin-top: 10px;
 .content p:last-of-type{
     margin-bottom: 20px;
   }
+.content div:last-of-type{
+  padding-bottom: 3px;
+}
 
   span:not(:empty){
     background-color: #f1f1f1;

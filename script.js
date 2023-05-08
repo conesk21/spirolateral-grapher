@@ -22,6 +22,8 @@ var colorSetting = "entire"
 var graphColorArray = ["#000000"]
 var graphColor = "#000000"
 var graphWeight = 3
+var graphPoints = true
+var pointWeight = 2
 var showAxis = true 
 var axisColor = "#000000"
 var axisWeight = 1
@@ -144,6 +146,18 @@ function updateColorHolder(number){
     updateColorArray()
 }
 
+function updateColorButtons(){
+    const colorButtons = document.querySelectorAll(".color-array")
+    colorButtons.forEach((item)=>{
+        item.addEventListener('input', (event)=>{
+            graphColorArray[parseInt(event.target.id)] = event.target.value
+            handleGraph()
+        
+        })
+    })
+
+}
+
 async function drawGraph(iterations){
     drawer.translate(center[0],center[1])
     let currentPos = newOrigin 
@@ -158,6 +172,17 @@ async function drawGraph(iterations){
             if (colorSetting=== "segment"){
                 graphColor = graphColorArray[i]
             }
+            if (graphPoints){
+                drawer.beginPath()
+                drawer.arc(currentPos[0],currentPos[1], pointWeight, 0, 2 * Math.PI);
+                drawer.lineWidth = pointWeight
+                drawer.strokeStyle = graphColor
+                drawer.fillStyle = graphColor
+                
+                drawer.closePath()
+                drawer.stroke()
+                drawer.fill()
+            }
             drawer.beginPath() 
             drawer.lineCap = "round"
             drawer.moveTo(currentPos[0],currentPos[1])
@@ -168,6 +193,8 @@ async function drawGraph(iterations){
             drawer.lineWidth = graphWeight
             drawer.closePath()
             drawer.stroke()
+            
+            
             if (animate){
                 await timer(500);
             }
@@ -404,17 +431,6 @@ bySegment.addEventListener('click', (event)=>{
 })
 
 
-function updateColorButtons(){
-    const colorButtons = document.querySelectorAll(".color-array")
-    colorButtons.forEach((item)=>{
-        item.addEventListener('input', (event)=>{
-            graphColorArray[parseInt(event.target.id)] = event.target.value
-            handleGraph()
-        
-        })
-    })
-
-}
 
 
 
@@ -442,6 +458,23 @@ graphSize.addEventListener("input", (event)=>{
     
 }, false)
 
+const buttonPoints = document.querySelector('#points')
+buttonPoints.addEventListener("click", ()=>{
+    graphPoints = !graphPoints
+    if(graphPoints){
+        buttonPoints.classList.remove("button-off")
+    } else {
+        buttonPoints.classList.add("button-off")
+    }
+    pointsRange.disabled = !pointsRange.disabled
+    handleGraph()
+})
+
+const pointsRange = document.querySelector('#point-weight')
+pointsRange.addEventListener('input',(event)=>{
+    pointWeight = event.target.value
+    handleGraph()
+})
 
 
 // buttons and functions for axis, grid and background
