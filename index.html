@@ -62,8 +62,8 @@
                 </div>  
                 <!-- container for canvas elements-->
                 <div class="canvas-holder">
-                    <canvas class = "lower canvas" id="lowerCanvas" height="760px" width="760px"></canvas>
-                    <canvas class = "upper canvas" id="upperCanvas" height="760px" width="760px"></canvas>
+                    <canvas class = "lower canvas" id="lowerCanvas" height="1100px" width="1100px"></canvas>
+                    <canvas class = "upper canvas" id="upperCanvas" height="1100px" width="1100px"></canvas>
                 
                 </div>
             </div>
@@ -96,10 +96,28 @@
             <button type="button" class="collapsible">graph </button>
                 <div class="content">
                     <div class="mutables">
+                    <h4>color mode</h4>
+                    <div class="color setting">
                     <div class="button-holder">
-                        <input type="color" id="graph-color" value="#000000">
-                        <label for="axis">color</label>
+                        <button class="color selected" id="color-graph">entire graph</button>
+                        </div>
+                        <div class="button-holder">
+                            <button class="color" id="color-iteration">by iteration</button>
+                            </div>
+                            <div class="button-holder">
+                                <button class="color" id="color-segment">by segment</button>
+                                </div>
+                        </div>
+                    <div id="color-holder">
+                        
+                            <input type="color" class ="color-array" id="0" value="#000000">
+                            
+                        
+
+            
                     </div>
+                    <h4>visual settings</h4>
+                    <div class="visual setting">
                     <div class="button-holder">
                     <input type="range" id="graph-weight"  min="1" max="30">
                     <label for="volume">line weight</label>
@@ -107,6 +125,7 @@
                     <div class="button-holder">
                     <input type="range" id="visual-size"  min="10" max="90">
                     <label for="volume">zoom</label>
+                    </div>
                     </div>
                     </div>
                 </div>

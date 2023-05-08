@@ -11,13 +11,15 @@ const canvas = document.querySelector("#upperCanvas");
 const drawer = canvas.getContext("2d")
 const grid = document.querySelector("#lowerCanvas")
 const gridDrawer = grid.getContext("2d")
-const center = [canvas.width/2,canvas.height/2]
+var center = [canvas.width/2,canvas.height/2]
 const timer = ms => new Promise(res => setTimeout(res, ms))
 // the percentage of canvas space that each graph takes up
 var visualSize = .7
 var valArray = [1,2,3]
 var scalar = getScaleFactor(valArray)
 var newOrigin = [1,2]
+var colorSetting = "entire"
+var graphColorArray = ["#000000"]
 var graphColor = "#000000"
 var graphWeight = 3
 var showAxis = true 
@@ -81,12 +83,14 @@ function getScaleFactor(array){
     return (Math.min(canvas.height,canvas.width)*visualSize)/getBoundingBoxSize(getCorners(array,4))
 }
 
-function getNumberofIterations(number){
-    if (number%4===2){
-        return 2
+function getNumberofIterations(array){
+    let disc = isClosed(array)
+    if (disc>0){
+        return disc
     } else {
-        return 4 
+        return 4
     }
+    
 }
 
 function getValArray(string){
@@ -108,7 +112,6 @@ function isClosed(array){
                 currentPos[directArray[index][0]] += directArray[index][1]*array[i]
             }
 
-        console.log(currentPos)
         if (currentPos[0] === 0 & currentPos[1] ===0){
             return 1
         }
@@ -117,13 +120,44 @@ function isClosed(array){
        
 
     }
+function updateColorArray(){
+    let colorArray = document.querySelectorAll(".color-array")
+    let newColors = []
+    for (let i=0; i<colorArray.length;i++){
+        newColors[i] = colorArray[i].value
+    }
+    graphColorArray = newColors
+}
 
+function updateColorHolder(number){
+    while(colorHolder.children.length > number){
+        colorHolder.removeChild(colorHolder.lastElementChild)
+    }
+    while(colorHolder.children.length < number){
+        let newColor = document.createElement('input')
+        newColor.setAttribute("type","color")
+        newColor.setAttribute("class","color-array")
+        newColor.setAttribute("id",colorHolder.children.length.toString())
+        colorHolder.appendChild(newColor)
+    }
+    
+    updateColorArray()
+}
 
 async function drawGraph(iterations){
     drawer.translate(center[0],center[1])
     let currentPos = newOrigin 
+    if (colorSetting === "entire"){
+        graphColor = graphColorArray[0]
+    }
     for (let j=0; j<iterations;j++){
+        if (colorSetting === "iteration"){
+            graphColor = graphColorArray[j]
+        }
         for(let i=0; i<valArray.length;i++){
+            if (colorSetting=== "segment"){
+                graphColor = graphColorArray[i]
+            }
             drawer.beginPath() 
             drawer.lineCap = "round"
             drawer.moveTo(currentPos[0],currentPos[1])
@@ -138,6 +172,7 @@ async function drawGraph(iterations){
                 await timer(500);
             }
         }
+        
 
     }
 
@@ -205,12 +240,26 @@ function handleGraph(){
  }
 
  function handleInput(){
+    center = [canvas.width/2,canvas.height/2]
     let valString = document.getElementById("value-string").value
     valArray = getValArray(valString)
     scalar = getScaleFactor(valArray)
     let graphCenter = getCenterPoint(valArray)
+    iterations = getNumberofIterations(valArray)
     handleAttributes(graphCenter)
     newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
+    if (colorSetting === "entire"){
+       
+        updateColorHolder(1)
+        updateColorButtons()
+        
+    } else if(colorSetting === "iteration"){
+        updateColorHolder(iterations)
+        updateColorButtons()
+    } else {
+        updateColorHolder(valArray.length)
+        updateColorButtons()
+    }
     handleLower()
     handleGraph()
 
@@ -300,6 +349,7 @@ document.addEventListener('keypress', (event)=>{
 
 
 
+
 // colapsable settings buttons 
 var collapsableButtons = document.getElementsByClassName("collapsible");
 var i;
@@ -315,45 +365,70 @@ for (i = 0; i < collapsableButtons.length; i++) {
     }
   });
 }
+const colorHolder = document.getElementById('color-holder')
 
-// buttons and functions for graph color weight and size 
-const graphPicker = document.querySelector("#graph-color");
-graphPicker.addEventListener("input", (event)=>{
-    graphColor = event.target.value;
-    if(animate){
-        animate = false
-        handleGraph()
-        animate = true
-    } else {
-        handleGraph()
-    }
-}, false)
-graphPicker.addEventListener("change", (event)=>{
-    graphColor = event.target.value;
-    if(animate){
-        handleGraph()
-    }
+const entireGraph = document.getElementById("color-graph")
+entireGraph.addEventListener('click', (event)=>{
+    colorSetting = "entire"
+    updateColorHolder(1)
+    updateColorButtons()
+    entireGraph.classList.add("selected")
+    byIteration.classList.remove("selected")
+    bySegment.classList.remove("selected")
+    handleGraph()
+
 })
+
+const byIteration = document.getElementById('color-iteration')
+byIteration.addEventListener('click', (event)=>{
+    colorSetting = "iteration"
+    let numElements = getNumberofIterations(valArray)
+    updateColorHolder(numElements)
+    updateColorButtons()
+    entireGraph.classList.remove("selected")
+    byIteration.classList.add("selected")
+    bySegment.classList.remove("selected")
+    handleGraph()
+
+})
+
+const bySegment = document.getElementById('color-segment')
+bySegment.addEventListener('click', (event)=>{
+    colorSetting = "segment"
+    updateColorHolder(valArray.length)
+    updateColorButtons()
+    entireGraph.classList.remove("selected")
+    byIteration.classList.remove("selected")
+    bySegment.classList.add("selected")
+    handleGraph()
+})
+
+
+function updateColorButtons(){
+    const colorButtons = document.querySelectorAll(".color-array")
+    colorButtons.forEach((item)=>{
+        item.addEventListener('input', (event)=>{
+            graphColorArray[parseInt(event.target.id)] = event.target.value
+            handleGraph()
+        
+        })
+    })
+
+}
+
+
+
+// buttons and functions for graph  weight and size 
+
 const graphRange = document.querySelector("#graph-weight");
 graphRange.addEventListener("input", (event)=>{
     graphWeight = event.target.value
-    if(animate){
-        animate = false
-        handleGraph()
-        animate = true 
-    } else {
-        handleGraph()
-    }
+    handleGraph()
+    
     
 }, false)
-graphRange.addEventListener("change", (event)=>{
-    graphWeight = event.target.value
-    if (animate){
-        handleGraph()
-    }
-}, false)
 
-graphRange.addEventListener
+
 
 const graphSize = document.querySelector("#visual-size");
 graphSize.addEventListener("input", (event)=>{
@@ -361,28 +436,13 @@ graphSize.addEventListener("input", (event)=>{
         scalar = getScaleFactor(valArray)
         let graphCenter = getCenterPoint(valArray)
         newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
-    if (animate){
-        animate = false 
         handleLower()
         handleGraph()
-        animate = true
-    } else {
-        handleLower()
-        handleGraph()
-    }
+    
     
 }, false)
 
-graphSize.addEventListener("change", (event)=>{
-    visualSize = event.target.value/100
-    scalar = getScaleFactor(valArray)
-    let graphCenter = getCenterPoint(valArray)
-    newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
-    if (animate){
-        handleLower()
-        handleGraph()
-    }
-})
+
 
 // buttons and functions for axis, grid and background
 
@@ -485,6 +545,7 @@ iteratioinAnimate.addEventListener('click',()=>{
     let graphCenter = getCenterPoint(valArray)
     newOrigin = [-(graphCenter[0]*scalar), (graphCenter[1]*scalar)]
     handleGraph()
+    
 })
 const drawAll = document.querySelector('#draw-all')
 drawAll.addEventListener('click',()=>{
@@ -505,6 +566,7 @@ animateAll.addEventListener('click',()=>{
     drawAll.classList.remove("selected")
     animateAll.classList.add("selected")
     handleGraph()
+    
 })
 
 const saveImageButton = document.getElementById("img")

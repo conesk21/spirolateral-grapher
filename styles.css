@@ -93,11 +93,9 @@ h1 {
 /*css for canvases*/
 .canvas-holder {
     position: relative;
-    height: 769px;
-    width: 769px;
-    padding: 7px;
     text-align: center;
-   
+    width: 100%;
+    aspect-ratio:calc(1/1);
 }
 
 canvas {
@@ -108,6 +106,7 @@ canvas {
     left: 0;
     right: 0;
     margin:auto; 
+
 }
 
 /*css for input area*/
@@ -275,6 +274,20 @@ input[type="color"]{
   input[type="color"]::-moz-color-swatch {
     border-radius: 3px;
     border: none;
+  }
+.color{
+  padding-bottom: 10px;
+}
+  #color-holder{
+    border-bottom: 1px #999 solid;
+    border-top: 1px #999 solid;
+    border-radius: 1px;
+    padding: 10px;
+    display:flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
   }
 
   input[type="range"] {
