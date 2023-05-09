@@ -34,6 +34,7 @@ var showBackground = false
 var backgroundColor = "#FFFFFF"
 var animate = false
 var iterations = getNumberofIterations(valArray)
+var hasBeenClicked = false 
 
 
 
@@ -202,6 +203,17 @@ async function drawGraph(iterations){
         
 
     }
+    if (graphPoints){
+        drawer.beginPath()
+        drawer.arc(currentPos[0],currentPos[1], pointWeight, 0, 2 * Math.PI);
+        drawer.lineWidth = pointWeight
+        drawer.strokeStyle = graphColor
+        drawer.fillStyle = graphColor
+        
+        drawer.closePath()
+        drawer.stroke()
+        drawer.fill()
+    }
 
 }
 
@@ -369,13 +381,24 @@ document.addEventListener('keypress', (event)=>{
     if (event.key === "Enter") {
     const isValid = input.reportValidity();
     if(isValid){
+        if (!hasBeenClicked){
+            var disabledButtons = document.querySelectorAll(".dbc")
+            disabledButtons.forEach((item)=>{
+                item.disabled = false
+            })
+            hasBeenClicked = true
+        }
      handleInput()
     }
 }
 });
 
 
-
+// disables buttons before initial click 
+var disabledButtons = document.querySelectorAll(".dbc")
+            disabledButtons.forEach((item)=>{
+                item.disabled = true
+            })
 
 // colapsable settings buttons 
 var collapsableButtons = document.getElementsByClassName("collapsible");

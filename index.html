@@ -24,7 +24,7 @@
         <div class="example">
         <div class="explanation">
         <h1>Spirolateral Graphs</h1>
-        <p>Discovered in the 60's by a teenager with graph paper and a particularly monotonic teacher, spirolateral graphs epitomize
+        <p>Discovered in the 60's by a teenager, spirolateral graphs epitomize
             a peculiar joy in mathematics, when a simple set of rules begets unexpected complexity and beauty.
             In general, spirolateral graphs are polygons generated from a sequence of integers 
             - tradionally the numbers from 1 to n - and a turning angle. From these starting elements, one simply draws a straight
@@ -85,8 +85,7 @@
                 <button type="button" class="collapsible">save</button>
                 <div class="content">
                 <h4>save as</h4>
-                <button id="img">image</button>
-                <button id="gif">gif</button>
+                <button class="dbc" id="img">image</button>
                 </div>
                 </div>
             </div>
@@ -99,19 +98,19 @@
                     <h4>color mode</h4>
                     <div class="color setting">
                     <div class="button-holder">
-                        <button class="color selected" id="color-graph">entire graph</button>
+                        <button class="color selected dbc" id="color-graph">entire graph</button>
                         </div>
                         <div class="button-holder">
-                            <button class="color" id="color-iteration">by iteration</button>
+                            <button class="color dbc" id="color-iteration">by iteration</button>
                             </div>
                             <div class="button-holder">
-                                <button class="color" id="color-segment">by segment</button>
+                                <button class="color dbc" id="color-segment">by segment</button>
                                 </div>
                         </div>
                     <h4>color</h4>
                     <div id="color-holder">
                         
-                            <input type="color" class ="color-array" id="0" value="#000000">
+                            <input type="color" class ="color-array dbc" id="0" value="#000000">
                             
                         
 
@@ -120,22 +119,22 @@
                     <h4>visual settings</h4>
                     <div class="visual setting">
                     <div class="button-holder">
-                    <input type="range" id="graph-weight"  min="1" max="30">
-                    <label for="volume">line weight</label>
+                    <input  class ="dbc"type="range" id="graph-weight"  min="1" max="30">
+                    <label for="graph-weight">line weight</label>
                     </div>
                     <div class="button-holder">
-                    <input type="range" id="visual-size"  min="10" max="90">
-                    <label for="volume">zoom</label>
+                    <input class = "dbc" type="range" id="visual-size"  min="10" max="90">
+                    <label for="visual-size">zoom</label>
                     </div>
                     </div>
                     <h4>points</h4>
                     <div class="point setting">
                         <div class="button-holder">
-                        <button class="point show" id="points">show</button>
+                        <button class="point show dbc" id="points">show</button>
                     </div>
                     
                     <div class="button-holder">
-                    <input type="range" id="point-weight"  min="1" max="20">
+                    <input class ="dbc" type="range" id="point-weight"  min="1" max="20">
                     <label for="point-weight">size</label>
                     </div>
                     </div>
@@ -151,37 +150,37 @@
                     <h4>axis</h4>
                     <div class="axis setting">
                         <div class="button-holder">
-                        <button class="axis show" id="axis">show</button>
+                        <button class="axis show dbc" id="axis">show</button>
                     </div>
                     <div class="button-holder">
-                    <input type="color" id="axis-color" value="#000000">
+                    <input class = "dbc" type="color" id="axis-color" value="#000000">
                     <label for="axis-color">color</label>
                     </div>
                     <div class="button-holder">
-                    <input type="range" id="axis-weight"  min="1" max="20">
+                    <input class="dbc" type="range" id="axis-weight"  min="1" max="20">
                     <label for="axis-weight">line weight</label>
                     </div>
                     </div>
                     <h4>grid</h4>
                     <div class="grid setting">
                         <div class="button-holder">
-                        <button class="grid show" id="grid">show</button>
+                        <button class="grid show dbc" id="grid">show</button>
                         </div>
                     
                     <div class="button-holder">
-                    <input type="color" id="grid-color" value="#6A6C6E">
+                    <input class="dbc" type="color" id="grid-color" value="#6A6C6E">
                     <label for="grid-color">color</label>
                     </div>
 
                     <div class="button-holder">
-                    <input type="range" id="grid-weight"  min="1" max="20">
+                    <input class="dbc" type="range" id="grid-weight"  min="1" max="20">
                     <label for="grid-weight">line weight</label>
                     </div>
                     </div>
                     <h4>background</h4>
                     <div class="background setting">
                     <div class="button-holder">
-                       <button class="background show button-off" id="background">show</button>
+                       <button class="background show dbc button-off" id="background">show</button>
                     </div>
                     <div class="back button-holder">
                     <input type="color" id="background-color" value="#FFFFFF" disabled>
@@ -199,22 +198,22 @@
                     <h4>one iteration</h4>
                     <div class="iteration setting">
                         <div class="button-holder">
-                        <button class="iteration" id="draw-one">draw</button>
+                        <button class="iteration dbc" id="draw-one">draw</button>
                         </div>
                         <div class="iteration setting">
                             <div class="button-holder">
-                            <button class="iteration" id="animate-one">animate</button>
+                            <button class="iteration dbc" id="animate-one">animate</button>
                          </div>
                          </div>
                     </div>
                      <h4>entire graph</h4>
                     <div class="all setting">
                         <div class="button-holder">
-                        <button class="all selected" id="draw-all">draw</button>
+                        <button class="all selected dbc" id="draw-all">draw</button>
                         </div>
                         <div class="all setting">
                             <div class="button-holder">
-                            <button class="all" id="animate-all">animate</button>
+                            <button class="all dbc" id="animate-all">animate</button>
                          </div>
                          </div>
                     
